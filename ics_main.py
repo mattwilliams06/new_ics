@@ -12,7 +12,7 @@ import time
 # The file will run a web application hosted on Heroku.
 # Author: Matt Williams, matthew.j.williams@protonmail.com, 518-221-3267
 def main():
-	passwords = ['riverrun', 'jupiter', 'andromeda', 'tesla', 'fermi']
+	passwords = ['administrat0r', 'riverrun', 'jupiter', 'andromeda', 'tesla', 'fermi']
 	st.title('Ship Prototype Testing Simulator')
 	st.header('Configuration options will appear once your password has been entered')
 	text_input = st.text_input('Password: ', value='')
@@ -74,7 +74,10 @@ def perform_calcs(password, engine, hullform, fuel_storage, er_design):
 	fuel_burn = 75   # gal/nm
 	Ao = 0.8
 	test_dict = dict([('riverrun', 1), ('jupiter', 5), ('andromeda', 10), ('tesla', 15)])
-	n_tests = test_dict[password]
+	if password == 'administrat0r':
+		n_tests = 5
+	else:
+		n_tests = test_dict[password]
 
 	speeds = []
 	mtbfs = []
@@ -139,19 +142,21 @@ def perform_calcs(password, engine, hullform, fuel_storage, er_design):
 	  if ao > 1.0:
 	    Aos[i] = 1.0
 
-	prog = progress_bar(n_tests)
+	prog = progress_bar(password, n_tests)
 	if prog == 'complete':
-		show_results(n_tests, speeds, mtbfs, cargoes, vehicles, fuels, ranges, Aos)
+		show_results(n_tests, speeds, mtbfs, cargoes, vehicles, fuels, ranges, Aos, cost_mult)
 
-def show_results(n_tests, speeds, mtbfs, cargoes, vehicles, fuels, ranges, Aos):
+def show_results(n_tests, speeds, mtbfs, cargoes, vehicles, fuels, ranges, Aos, cost_mult):
 	if n_tests == 1:
 		st.markdown('Testing Results: ')
 		st.markdown(f'Speed: {speed_final:.2f} kts  \nMTBF: {mtbf_final:.1f} hours  \nCargo space: {cargo_final:.2f} sqft  \n\
-		Vehicle storage: {vehicle_final:.2f} cuft  \nFuel capacity: {fuel_final:.2f} gallons  \nRange: {range_final:.2f}  \nAo: {ao_final:0.1f}')
+		Vehicle storage: {vehicle_final:.2f} cuft  \nFuel capacity: {fuel_final:.2f} gallons  \nRange: {range_final:.2f}  \nAo: {ao_final:0.1f} \n\
+		Cost factor: {cost_mult:.2f}')
 	else:
 		st.markdown('Testing Results: ')
 		st.markdown(f'Speed: {np.mean(speeds):.2f} kts  \nMTBF: {np.mean(mtbfs):.1f} hours  \nCargo space: {np.mean(cargoes):.2f} sqft  \n\
-		Vehicle storage: {np.mean(vehicles):.2f} cuft  \nFuel capacity: {np.mean(fuels):.2f} gallons  \nRange: {np.mean(ranges):.2f}  \nAo: {np.mean(Aos):0.1f}')
+		Vehicle storage: {np.mean(vehicles):.2f} cuft  \nFuel capacity: {np.mean(fuels):.2f} gallons  \nRange: {np.mean(ranges):.2f}  \n\
+		Ao: {np.mean(Aos):0.1f}  \nCost factor: {cost_mult:.2f}')
 		#fig, ax = plt.subplots(3, 2)
 		plt.plot(range(1, n_tests+1), speeds, 'g-.', marker='*', markersize=14, label='Test speed')
 		plt.hlines(np.mean(speeds), 1, n_tests, colors='red', linestyle='dashed', label='Average')
@@ -209,8 +214,11 @@ def show_results(n_tests, speeds, mtbfs, cargoes, vehicles, fuels, ranges, Aos):
 		plt.legend()
 		st.pyplot()
 
-def progress_bar(n_tests):
-	test_len = 1
+def progress_bar(password, n_tests):
+	if password == 'administrat0r':
+		test_len = 1
+	else:
+		test_len = 120
 	latest_iteration = st.empty()
 	my_bar = st.progress(0)
 	test_time = n_tests * test_len - (n_tests // 5) * test_len
