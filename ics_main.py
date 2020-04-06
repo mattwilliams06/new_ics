@@ -12,11 +12,12 @@ import time
 # The file will run a web application hosted on Heroku.
 # Author: Matt Williams, matthew.j.williams@protonmail.com, 518-221-3267
 def main():
+	# Asks for password, and calls get_selections() is the password is valid
 	passwords = ['administrat0r', 'riverrun', 'jupiter', 'andromeda', 'tesla', 'fermi']
 	st.title('Ship Prototype Testing Simulator')
 	st.header('Configuration options will appear once your password has been entered')
 	text_input = st.text_input('Password: ', value='')
-	password = text_input.lower()
+	password = text_input.lower()  # convert user input to lowercase
 	if password in passwords:
 		st.write('You entered ', password)
 		get_selections(password)
