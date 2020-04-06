@@ -98,12 +98,15 @@ def perform_calcs(password, engine, hullform, fuel_storage, er_design):
 	  categories = ['speed', 'mtbf', 'cargo', 'vehicle', 'fuel', 'burn', 'ao']
 	  param_dict = {}
 	  for cat in categories:
+	  	  p1_mean = 0.95
+	  	  p2_mean = 1.
+	  	  p3_mean = 1.05
 		  p1_std = np.random.uniform(.05, .1)
 		  p2_std = np.random.uniform(.075, .15)
 		  p3_std = np.random.uniform(.1, .2)
-		  p1_std *= 0.8
-		  p2_std *= .9
-		  p3_std *= 1.
+		  p1_std *= p1_mean
+		  p2_std *= p2_mean
+		  p3_std *= p3_mean
 		  p1 = np.random.normal(.95, p1_std)
 		  p2 = np.random.normal(1.0, p2_std)
 		  p3 = np.random.normal(1.05, p3_std)
