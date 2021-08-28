@@ -54,7 +54,7 @@ ptyprocess==0.6.0
 pydeck==0.3.0b4
 pygal-maps-world==1.0.2
 pygame==1.9.4
-Pygments==2.6.1
+Pygments==2.7.4
 pyparsing==2.4.6
 pyrsistent==0.16.0
 python-dateutil==2.8.1
